@@ -19,24 +19,16 @@ build-backend = "poetry.core.masonry.api"
 ############################
 # https://python-poetry.org/docs/dependency-specification
 [tool.poetry.dependencies]
-aiosqlite = ">=0.18.0"
-alembic = "^1.11.1"
 asgiref = "^3.7.2"
-celery =  { version = "^5.3.1", extras = ["redis"] }
-cloudevents = "^1.9.0"
 dependency-injector = { version = "^4.41.0", extras = ["pydantic"] }
 httpx = ">=0.23.0"
 opentelemetry-distro = { version = "*", extras = ["otlp"] }
 opentelemetry-instrumentation = "*"
-opentelemetry-instrumentation-celery = "*"
 opentelemetry-instrumentation-httpx = "*"
-opentelemetry-instrumentation-sqlalchemy = "*"
 pydantic = "^2.2.1"
 pydantic-settings = "^2.0.3"
 python = ">=3.9,<3.12"
 rich = "^13.2.0"
-SQLAlchemy = { version = "^2.0.0", extras = ["asyncio", "mypy"] }
-sqlalchemy-bind-manager = "*"
 structlog = "^24.0.0"
 
 [tool.poetry.group.http]
@@ -47,7 +39,6 @@ fastapi = ">=0.99.0"
 jinja2 = "^3.1.2"
 opentelemetry-instrumentation-fastapi = "*"
 starlette-prometheus = "^0.9.0"
-strawberry-graphql = { version = ">=0.204.0", extras = ["debug-server"] }
 uvicorn = { version = "^0.27.0", extras = ["standard"] }
 
 [tool.poetry.group.dev]
@@ -62,13 +53,11 @@ mkdocs-macros-adr-summary = "*"
 mkdocs-material = "*"
 mkdocs-mermaid2-plugin = "*"
 mypy = "*"
-mypy-protobuf = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-factoryboy = "*"
 pytest-xdist = "*"
 ruff = "*"
-strawberry-graphql = { version = "*", extras = ["debug-server", "fastapi"] }
 pymdown-extensions = "*"
 
 
@@ -97,7 +86,7 @@ exclude_also = [
 [tool.mypy]
 files = ["src", "tests"]
 exclude = ["alembic"]
-plugins = "pydantic.mypy,strawberry.ext.mypy_plugin"
+plugins = "pydantic.mypy"
 
 # We can remove celery by installing `celery-types` but needs
 # at least python 3.10. For now we maintain the override.

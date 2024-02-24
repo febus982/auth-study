@@ -14,6 +14,5 @@ def anyio_backend():
 @pytest.fixture(scope="function")
 def test_config() -> AppConfig:
     return AppConfig(
-        SQLALCHEMY_CONFIG={},
         ENVIRONMENT="test",
     )

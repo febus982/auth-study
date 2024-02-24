@@ -6,52 +6,6 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
 
-  redis:
-    image: redis
-
-  celery-worker:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: celery_app
-    environment:
-      OTEL_SERVICE_NAME: "bootstrap-fastapi-worker"
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
-      CELERY__broker_url: "redis://redis:6379/0"
-      CELERY__result_backend: "redis://redis:6379/1"
-    working_dir: "/app/src"
-    volumes:
-      - '.:/app'
-    depends_on:
-      - redis
-      - otel-collector
-      - celery-beat
-
-  celery-beat:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: celery_app
-    environment:
-      OTEL_SERVICE_NAME: "bootstrap-fastapi-worker"
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
-      CELERY__broker_url: "redis://redis:6379/0"
-      CELERY__result_backend: "redis://redis:6379/1"
-    working_dir: "/app/src"
-    volumes:
-      - '.:/app'
-    depends_on:
-      - redis
-      - otel-collector
-    command:
-      - opentelemetry-instrument
-      - celery
-      - -A
-      - celery_worker:app
-      - beat
-      - -l
-      - INFO
-
   dev:
     build:
       dockerfile: Dockerfile
@@ -60,15 +14,12 @@ services:
     environment:
       OTEL_SERVICE_NAME: "bootstrap-fastapi-dev"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
-      CELERY__broker_url: "redis://redis:6379/0"
-      CELERY__result_backend: "redis://redis:6379/1"
     ports:
       - '8000:8000'
     working_dir: "/app/src"
     volumes:
       - '.:/app'
     depends_on:
-      - redis
       - otel-collector
     command:
       - opentelemetry-instrument
@@ -87,13 +38,10 @@ services:
       context: .
       target: http_app
     depends_on:
-      - redis
       - otel-collector
     environment:
       OTEL_SERVICE_NAME: "bootstrap-fastapi-http"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
-      CELERY__broker_url: "redis://redis:6379/0"
-      CELERY__result_backend: "redis://redis:6379/1"
     ports:
       - '8001:8000'
     volumes:
