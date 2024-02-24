@@ -65,9 +65,6 @@ USER nonroot
 RUN poetry config virtualenvs.path /poetryvenvs
 COPY --chown=nonroot:nonroot pyproject.toml .
 COPY --chown=nonroot:nonroot poetry.lock .
-COPY --chown=nonroot:nonroot src/alembic ./alembic
-COPY --chown=nonroot:nonroot src/domains ./domains
-COPY --chown=nonroot:nonroot src/gateways ./gateways
 COPY --chown=nonroot:nonroot src/bootstrap ./bootstrap
 COPY --chown=nonroot:nonroot src/alembic.ini .
 COPY --chown=nonroot:nonroot Makefile .
@@ -78,11 +75,3 @@ COPY --from=http_builder /poetryvenvs /poetryvenvs
 COPY --chown=nonroot:nonroot src/http_app ./http_app
 # Run CMD using array syntax, so it's uses `exec` and runs as PID1
 CMD ["opentelemetry-instrument", "uvicorn", "http_app:create_app", "--host", "0.0.0.0", "--port", "8000", "--factory"]
-
-# Copy the celery python package and requirements from relevant builder
-FROM base_app as celery_app
-COPY --from=celery_builder /poetryvenvs /poetryvenvs
-COPY --chown=nonroot:nonroot src/celery_worker ./celery_worker
-RUN ls
-# Run CMD using array syntax, so it's uses `exec` and runs as PID1
-CMD ["opentelemetry-instrument", "celery", "-A", "celery_worker:app", "worker", "-l", "INFO"]
