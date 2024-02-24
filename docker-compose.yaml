@@ -14,6 +14,7 @@ services:
     environment:
       OTEL_SERVICE_NAME: "bootstrap-fastapi-dev"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+      WATCHFILES_FORCE_POLLING: true
     ports:
       - '8000:8000'
     working_dir: "/app/src"
@@ -21,6 +22,9 @@ services:
       - '.:/app'
     depends_on:
       - otel-collector
+      - mailslurper
+      - oathkeeper
+      - kratos-selfservice-ui-node
     command:
       - opentelemetry-instrument
       - uvicorn
@@ -31,26 +35,6 @@ services:
       - "8000"
       - --factory
       - --reload
-
-  http:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: http_app
-    depends_on:
-      - otel-collector
-      - mailslurper
-      - oathkeeper
-      - kratos-selfservice-ui-node
-    environment:
-      OTEL_SERVICE_NAME: "bootstrap-fastapi-http"
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
-    ports:
-      - '8001:8000'
-    volumes:
-      - './sqlite.db:/app/sqlite.db'
-
-
 
   kratos-migrate:
     image: oryd/kratos:v1.1.0

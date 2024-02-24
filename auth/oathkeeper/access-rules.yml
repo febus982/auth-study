@@ -55,7 +55,7 @@
 - id: "http_app:protected"
   upstream:
     preserve_host: true
-    url: "http://http:8000"
+    url: "http://dev:8000"
   match:
     url: "http://127.0.0.1:4455/hello<{,/}>"
     methods:
