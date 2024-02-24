@@ -1,0 +1,154 @@
+[tool.poetry]
+name = "bootstrap-fastapi-service"
+version = "0.1.0"
+description = ""
+authors = ["Federico Busetti <729029+febus982@users.noreply.github.com>"]
+readme = "README.md"
+packages = [
+    { include = "**/*.py", from = "src" }
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
+############################
+### Package requirements ###
+############################
+# https://python-poetry.org/docs/dependency-specification
+[tool.poetry.dependencies]
+aiosqlite = ">=0.18.0"
+alembic = "^1.11.1"
+asgiref = "^3.7.2"
+celery =  { version = "^5.3.1", extras = ["redis"] }
+cloudevents = "^1.9.0"
+dependency-injector = { version = "^4.41.0", extras = ["pydantic"] }
+httpx = ">=0.23.0"
+opentelemetry-distro = { version = "*", extras = ["otlp"] }
+opentelemetry-instrumentation = "*"
+opentelemetry-instrumentation-celery = "*"
+opentelemetry-instrumentation-httpx = "*"
+opentelemetry-instrumentation-sqlalchemy = "*"
+pydantic = "^2.2.1"
+pydantic-settings = "^2.0.3"
+python = ">=3.9,<3.12"
+rich = "^13.2.0"
+SQLAlchemy = { version = "^2.0.0", extras = ["asyncio", "mypy"] }
+sqlalchemy-bind-manager = "*"
+structlog = "^24.0.0"
+
+[tool.poetry.group.http]
+optional = true
+
+[tool.poetry.group.http.dependencies]
+fastapi = ">=0.99.0"
+jinja2 = "^3.1.2"
+opentelemetry-instrumentation-fastapi = "*"
+starlette-prometheus = "^0.9.0"
+strawberry-graphql = { version = ">=0.204.0", extras = ["debug-server"] }
+uvicorn = { version = "^0.27.0", extras = ["standard"] }
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+asynctest = "*"
+coverage = "*"
+mkdocs = "*"
+mkdocs-awesome-pages-plugin = "*"
+mkdocs-macros-adr-summary = "*"
+mkdocs-material = "*"
+mkdocs-mermaid2-plugin = "*"
+mypy = "*"
+mypy-protobuf = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-factoryboy = "*"
+pytest-xdist = "*"
+ruff = "*"
+strawberry-graphql = { version = "*", extras = ["debug-server", "fastapi"] }
+pymdown-extensions = "*"
+
+
+############################
+### Tools configuration  ###
+############################
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = [
+    "src/alembic/*",
+    "src/bootstrap/config.py",
+    "src/bootstrap/logs/*",
+]
+# It's not necessary to configure concurrency here
+# because pytest-cov takes care of that
+
+[tool.coverage.report]
+fail_under = 100
+exclude_also = [
+    "pragma: no cover",
+    "pass",
+    "\\.\\.\\.",
+    ]
+
+[tool.mypy]
+files = ["src", "tests"]
+exclude = ["alembic"]
+plugins = "pydantic.mypy,strawberry.ext.mypy_plugin"
+
+# We can remove celery by installing `celery-types` but needs
+# at least python 3.10. For now we maintain the override.
+[[tool.mypy.overrides]]
+module = [
+    "celery.*"
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-n auto --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+
+[tool.ruff]
+target-version = "py39"
+extend-exclude = [
+    "docs",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "W",  # pycodestyle
+    "F",  # pyflakes
+    "I",  # isort
+    "N",  # pep8-naming
+    "S",  # flake8-bandit
+    "RUF",  # ruff-specific-rules
+]
+# Ignoring rules problematic with formatter
+# https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+ignore = [
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "D206",
+    "D300",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "COM812",
+    "COM819",
+    "ISC001",
+    "ISC002",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Ignore unused imports on init files
+"tests/**/*.py" = ["S101"]  # Allow assert usage on tests
