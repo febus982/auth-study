@@ -283,4 +283,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-auth/kratos/db.sqlite
+auth/**/db.sqlite
