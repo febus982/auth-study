@@ -70,24 +70,3 @@ services:
     restart: on-failure
     volumes:
       - ./auth/oathkeeper:/etc/config/oathkeeper
-
-  # Starting from here there are only single-run commands, we can use `make` here
-  test:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: dev
-    volumes:
-      - '.:/app'
-    command:
-      - "make"
-      - "test"
-
-  ci-test:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: dev
-    command:
-      - "make"
-      - "ci-test"
