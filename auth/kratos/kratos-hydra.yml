@@ -1,0 +1,82 @@
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      enabled: true
+  admin:
+    # This is the internal URL, we'll be accessing using docker container name
+    base_url: http://kratos:4434/
+
+selfservice:
+  # URLs are pointing to the UI
+  default_browser_return_url: http://127.0.0.1:3000/
+  allowed_return_urls:
+    - http://127.0.0.1:3000/
+
+# Only password
+  methods:
+    password:
+      enabled: true
+
+  # All fows point to UI
+  flows:
+    error:
+      ui_url: http://127.0.0.1:3000/error
+
+    settings:
+      ui_url: http://127.0.0.1:3000/settings
+    # Verification and recovery are disabled
+    recovery:
+      ui_url: http://127.0.0.1:3000/recovery
+      enabled: false
+
+    verification:
+      ui_url: http://127.0.0.1:3000/verification
+      enabled: false
+
+    logout:
+      after:
+        default_browser_return_url: http://127.0.0.1:3000/login
+
+    login:
+      ui_url: http://127.0.0.1:3000/login
+
+    registration:
+      ui_url: http://127.0.0.1:3000/registration
+      after:
+        password:
+          hooks:
+            - hook: session
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+  cipher:
+    - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: bcrypt
+  bcrypt:
+    cost: 8
+
+identity:
+  schemas:
+    - id: default
+      url: file:///home/ory/identity.schema.json
+
+courier:
+  smtp:
+    connection_uri: smtps://test:test@mailslurper:1025/?skip_ssl_verify=true
+
+feature_flags:
+  use_continue_with_transitions: true
+
+oauth2_provider:
+  url: http://hydra:4445

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="sqlite" uuid="8fc6e235-b404-4f37-b153-69c93f657cfb">
+    <data-source source="LOCAL" name="hydra_db" uuid="2e730ade-1db8-49bd-8c28-2620d91305fc">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/sqlite.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/auth/hydra/db.sqlite</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+      </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
