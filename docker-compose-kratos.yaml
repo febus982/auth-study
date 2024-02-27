@@ -43,12 +43,11 @@ services:
     image: oryd/kratos-selfservice-ui-node:v1.0.0
     environment:
       KRATOS_PUBLIC_URL: "http://kratos:4433/"
-      PORT: "4435"
       KRATOS_BROWSER_URL: "http://127.0.0.1:8000/.ory/kratos/public"
       JWKS_URL: "http://oathkeeper:4456/.well-known/jwks.json"
       SECURITY_MODE: "jwks"
     ports:
-      - '4435:4435' # public
+      - '3000:3000' # public
     restart: on-failure
   mailslurper:
     image: oryd/mailslurper:latest-smtps

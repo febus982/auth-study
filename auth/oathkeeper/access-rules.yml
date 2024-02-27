@@ -21,9 +21,24 @@
 - id: "ory:kratos-selfservice-ui-node:anonymous"
   upstream:
     preserve_host: true
-    url: "http://kratos-selfservice-ui-node:4435"
+    url: "http://kratos-selfservice-ui-node:3000"
   match:
     url: "http://127.0.0.1:8000/<{registration,welcome,recovery,verification,login,error,health/{alive,ready},**.css,**.js,**.png,**.svg,**.woff*}>"
+    methods:
+      - GET
+  authenticators:
+    - handler: anonymous
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
+
+- id: "ory:kratos-selfservice-ui-node-root:anonymous"
+  upstream:
+    preserve_host: true
+    url: "http://kratos-selfservice-ui-node:3000"
+  match:
+    url: "http://127.0.0.1:8000/"
     methods:
       - GET
   authenticators:
@@ -36,7 +51,7 @@
 - id: "ory:kratos-selfservice-ui-node:protected"
   upstream:
     preserve_host: true
-    url: "http://kratos-selfservice-ui-node:4435"
+    url: "http://kratos-selfservice-ui-node:3000"
   match:
     url: "http://127.0.0.1:8000/<{sessions,settings}>"
     methods:
