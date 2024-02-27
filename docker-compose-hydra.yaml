@@ -17,8 +17,6 @@ services:
       - hydra
       - mailslurper
       - kratos
-      - kratos-selfservice-ui-node
-
 
   hydra-migrate:
     image: oryd/hydra:v2.2.0
