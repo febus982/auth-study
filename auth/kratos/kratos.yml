@@ -18,16 +18,16 @@ selfservice:
   methods:
     password:
       enabled: true
-    totp:
-      config:
-        issuer: Kratos
-      enabled: true
-    lookup_secret:
-      enabled: true
-    link:
-      enabled: true
-    code:
-      enabled: true
+#    totp:
+#      config:
+#        issuer: Kratos
+#      enabled: true
+#    lookup_secret:
+#      enabled: true
+#    link:
+#      enabled: true
+#    code:
+#      enabled: true
 
   flows:
     error:
@@ -38,13 +38,14 @@ selfservice:
       privileged_session_max_age: 15m
       required_aal: highest_available
 
+    # If we enable recovery or verification we need also
+    # MailSlurper in the relevant docker-compose file
     recovery:
-      enabled: true
+      enabled: false
       ui_url: http://127.0.0.1:8000/recovery
       use: code
-
     verification:
-      enabled: true
+      enabled: false
       ui_url: http://127.0.0.1:8000/verification
       use: code
       after:
@@ -65,7 +66,7 @@ selfservice:
         password:
           hooks:
             - hook: session
-            - hook: show_verification_ui
+#            - hook: show_verification_ui
 
 log:
   level: debug
