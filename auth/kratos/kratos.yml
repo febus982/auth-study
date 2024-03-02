@@ -3,6 +3,26 @@ serve:
     base_url: http://127.0.0.1:4433/
     cors:
       enabled: true
+      allowed_origins:
+        - http://127.0.0.1:3001
+        - http://127.0.0.1:3000
+        - http://127.0.0.1:8000
+        - https://127.0.0.1:3001
+        - https://127.0.0.1:3000
+        - https://127.0.0.1:8000
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
   admin:
     # This is the internal URL, we'll be accessing using docker container name
     base_url: http://kratos:4434/
